@@ -7,6 +7,13 @@ var enemyNames = ["Roborto", "Amy Android", "Robo Trumble"];
 var enemyHealth = 50;
 var enemyAttack = 12;
 
+// function to generate a random numeric value
+var randomNumber = function (x, y) {
+  var value = Math.floor(Math.random() * (y - x + 1)) + 40;
+
+  return value;
+};
+
 // fight function (now with parameter for enemy's name)
 var fight = function (enemyName) {
   while (playerHealth > 0 && enemyHealth > 0) {
@@ -24,14 +31,14 @@ var fight = function (enemyName) {
       if (confirmSkip) {
         window.alert(playerName + " has decided to skip this fight. Goodbye!");
         // subtract money from playerMoney for skipping
-        playerMoney = playerMoney - 10;
+        playerMoney = Math.max(0, playerMoney - 10);
         console.log("playerMoney", playerMoney);
         break;
       }
     }
 
     // remove enemy's health by subtracting the amount set in the playerAttack variable
-    enemyHealth = enemyHealth - playerAttack;
+    enemyHealth = Math.max(0, enemyHealth - playerAttack);
     console.log(
       playerName +
         " attacked " +
@@ -57,7 +64,9 @@ var fight = function (enemyName) {
     }
 
     // remove players's health by subtracting the amount set in the enemyAttack variable
-    playerHealth = playerHealth - enemyAttack;
+    var damage = randomNumber(enemyAttack - 3, enemyAttack);
+
+    playerHealth = Math.max(0, playerHealth - damage);
     console.log(
       enemyName +
         " attacked " +
@@ -98,7 +107,7 @@ var startGame = function () {
       var pickedEnemyName = enemyNames[i];
 
       // reset enemyHealth before starting new fight
-      enemyHealth = 50;
+      enemyHealth = randomNumber(40, 60);
 
       // pass the pickedEnemyName variable's value into the fight function, where it will assume the value of the enemyName parameter
       fight(pickedEnemyName);
